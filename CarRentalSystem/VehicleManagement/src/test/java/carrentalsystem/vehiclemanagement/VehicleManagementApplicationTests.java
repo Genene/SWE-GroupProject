@@ -1,10 +1,10 @@
-package carrentalsystem.customermanagement;
+package carrentalsystem.vehiclemanagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CustomerManagementApplicationTests {
+class VehicleManagementApplicationTests {
 
     @Test
     void contextLoads() {

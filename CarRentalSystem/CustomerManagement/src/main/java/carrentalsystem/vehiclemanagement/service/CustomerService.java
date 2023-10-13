@@ -1,6 +1,6 @@
-package carrentalsystem.customermanagement.service;
+package carrentalsystem.vehiclemanagement.service;
 
-import carrentalsystem.customermanagement.model.Customer;
+import carrentalsystem.vehiclemanagement.model.Customer;
 
 import java.util.List;
 import java.util.Optional;

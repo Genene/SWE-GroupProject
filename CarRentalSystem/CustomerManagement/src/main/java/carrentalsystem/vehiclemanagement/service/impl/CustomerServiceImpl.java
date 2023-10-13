@@ -1,16 +1,15 @@
-package carrentalsystem.customermanagement.service.impl;
+package carrentalsystem.vehiclemanagement.service.impl;
 
 
-import carrentalsystem.customermanagement.model.Customer;
-import carrentalsystem.customermanagement.repository.CustomerRepository;
+import carrentalsystem.vehiclemanagement.model.Customer;
+import carrentalsystem.vehiclemanagement.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import carrentalsystem.customermanagement.service.CustomerService;
+import carrentalsystem.vehiclemanagement.service.CustomerService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 

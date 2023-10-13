@@ -1,8 +1,7 @@
-package carrentalsystem.customermanagement.model;
+package carrentalsystem.vehiclemanagement.model;
 
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+public class Location {
     String street;
     String city;
     String state;

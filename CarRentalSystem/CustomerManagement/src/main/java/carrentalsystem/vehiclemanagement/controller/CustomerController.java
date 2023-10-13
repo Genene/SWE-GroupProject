@@ -1,9 +1,9 @@
-package carrentalsystem.customermanagement.controller;
+package carrentalsystem.vehiclemanagement.controller;
 
 
 
-import carrentalsystem.customermanagement.model.Customer;
-import carrentalsystem.customermanagement.service.CustomerService;
+import carrentalsystem.vehiclemanagement.model.Customer;
+import carrentalsystem.vehiclemanagement.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

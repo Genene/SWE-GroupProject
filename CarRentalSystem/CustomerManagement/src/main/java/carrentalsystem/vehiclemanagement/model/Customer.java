@@ -1,4 +1,4 @@
-package carrentalsystem.customermanagement.model;
+package carrentalsystem.vehiclemanagement.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

@@ -1,7 +1,7 @@
-package carrentalsystem.customermanagement.repository;
+package carrentalsystem.vehiclemanagement.repository;
 
 
-import carrentalsystem.customermanagement.model.Customer;
+import carrentalsystem.vehiclemanagement.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
