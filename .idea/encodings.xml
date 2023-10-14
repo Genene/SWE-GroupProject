@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/CarRentalSystem/CustomerManagement/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/CarRentalSystem/Gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/CarRentalSystem/PaymentProcessing/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CarRentalSystem/RentalManagement/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CarRentalSystem/ReservationManagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/CarRentalSystem/VehicleManagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/CarRentalSystem/VehicleManagement/src/main/resources" charset="UTF-8" />
   </component>

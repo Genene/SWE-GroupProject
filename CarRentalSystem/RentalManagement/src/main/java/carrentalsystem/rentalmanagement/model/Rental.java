@@ -22,11 +22,9 @@ public class Rental {
     private Long id;
 
     @NotNull(message = "Vehicle is required")
-
     private String vehicle_id;
 
     @NotNull(message = "Customer is required")
-
     private String customer_id;
 
     @NotNull(message = "Start date is required")

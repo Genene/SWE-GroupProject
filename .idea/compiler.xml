@@ -7,10 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ReservationManagement" />
         <module name="PaymentProcessing" />
         <module name="CustomerManagement" />
         <module name="Gateway" />
         <module name="VehicleManagement" />
+        <module name="RentalManagement" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -25,6 +27,8 @@
       <module name="CustomerManagement (2)" options="-parameters" />
       <module name="Gateway" options="-parameters" />
       <module name="PaymentProcessing" options="-parameters" />
+      <module name="RentalManagement" options="-parameters" />
+      <module name="ReservationManagement" options="-parameters" />
       <module name="VehicleManagement" options="-parameters" />
     </option>
   </component>

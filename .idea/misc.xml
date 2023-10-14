@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/CarRentalSystem/VehicleManagement/pom.xml" />
         <option value="$PROJECT_DIR$/CarRentalSystem/PaymentProcessing/pom.xml" />
         <option value="$PROJECT_DIR$/CarRentalSystem/Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/CarRentalSystem/RentalManagement/pom.xml" />
+        <option value="$PROJECT_DIR$/CarRentalSystem/ReservationManagement/pom.xml" />
       </list>
     </option>
   </component>
