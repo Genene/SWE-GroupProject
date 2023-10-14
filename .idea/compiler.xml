@@ -7,6 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="PaymentProcessing" />
+        <module name="CustomerManagement" />
+        <module name="Gateway" />
         <module name="VehicleManagement" />
       </profile>
     </annotationProcessing>
@@ -20,6 +23,8 @@
       <module name="CustomerManagement" options="-parameters" />
       <module name="CustomerManagement (1)" options="-parameters" />
       <module name="CustomerManagement (2)" options="-parameters" />
+      <module name="Gateway" options="-parameters" />
+      <module name="PaymentProcessing" options="-parameters" />
       <module name="VehicleManagement" options="-parameters" />
     </option>
   </component>
