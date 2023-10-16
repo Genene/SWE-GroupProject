@@ -1,35 +1,38 @@
 package carrentalsystem.reservationmanagement.service;
 
+import carrentalsystem.reservationmanagement.dto.ReservationRequestDTO;
+import carrentalsystem.reservationmanagement.dto.ReservationResponseDTO;
 import carrentalsystem.reservationmanagement.model.Reservation;
 import carrentalsystem.reservationmanagement.model.enums.ReservationStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReservationService {
 
-    Reservation createReservation(Reservation reservation);
+    ReservationResponseDTO createReservation(ReservationRequestDTO reservationRequestDTO);
 
-    Reservation getReservationById(Long id);
+    ReservationResponseDTO getReservationById(Long id);
 
-    Reservation updateReservation(Reservation reservation, Long id);
+    ReservationResponseDTO updateReservation(ReservationRequestDTO reservationRequestDTO, Long id);
 
     void deleteReservation(Long id);
 
-    List<Reservation> getAllReservations();
+    List<ReservationResponseDTO> getAllReservations();
 
-    List<Reservation> searchReservations(String query);
+    List<ReservationResponseDTO> searchReservations(String query);
 
-    List<Reservation> advancedSearchReservations(String query, String sort);
+    List<ReservationResponseDTO> advancedSearchReservations(String query, String sort);
 
-    List<Reservation> getReservationByVehicleId(String vehicleId);
+    List<ReservationResponseDTO> getReservationByVehicleId(long vehicleId);
 
-    List<Reservation> getReservationByCustomerId(String customerId);
+    List<ReservationResponseDTO> getReservationByCustomerId(long customerId);
 
-    List<Reservation> getReservationByStartDate(String startDate);
+    List<ReservationResponseDTO> getReservationByStartDate(LocalDate startDate);
 
-    List<Reservation> getReservationByEndDate(String endDate);
+    List<ReservationResponseDTO> getReservationByEndDate(LocalDate endDate);
 
-    List<Reservation> getReservationByTotalPrice(String totalPrice);
+    List<ReservationResponseDTO> getReservationByTotalPrice(double totalPrice);
 
-    List<Reservation> getReservationByStatus(ReservationStatus status);
+    List<ReservationResponseDTO> getReservationByStatus(ReservationStatus status);
 }

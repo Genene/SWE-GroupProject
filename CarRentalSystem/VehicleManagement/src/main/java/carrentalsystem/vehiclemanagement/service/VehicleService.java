@@ -7,9 +7,12 @@ import java.util.Optional;
 
 public interface VehicleService {
      List<Vehicle> getAllVehicle() ;
-     Optional<Vehicle> getVehicleById(Long id) ;
+     Vehicle getVehicleById(Long id) ;
      Vehicle createVehicle(Vehicle vehicle) ;
      Vehicle updateVehicle(Vehicle vehicle, Long id);
      void deleteVehicle(Long id) ;
 
+    List<Vehicle> getAvailableVehicles();
+
+     Vehicle setVehicleBooked(Long id);
 }

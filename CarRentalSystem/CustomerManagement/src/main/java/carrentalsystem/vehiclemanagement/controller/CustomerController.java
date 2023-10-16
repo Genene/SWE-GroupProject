@@ -28,8 +28,14 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomerById(@PathVariable Long id) {
-        return customerService.getCustomerById(id);
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id) {
+        try{
+            Customer customer = customerService.getCustomerById(id).get();
+            return new ResponseEntity<>(customer.getId(), HttpStatus.OK);
+        } catch (Exception e)
+        {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping

@@ -23,8 +23,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Optional<Vehicle> getVehicleById(Long id) {
-        return vehicleRepository.findById(id);
+    public Vehicle getVehicleById(Long id) {
+        return vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle with id: " + id + " not found"));
     }
 
     @Override
@@ -57,6 +57,18 @@ public class VehicleServiceImpl implements VehicleService {
     public void deleteVehicle(Long id) {
         vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle with id: " + id + " not found"));
         vehicleRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Vehicle> getAvailableVehicles() {
+        return vehicleRepository.findByAvailability(true);
+    }
+
+    @Override
+    public Vehicle setVehicleBooked(Long id) {
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle with id: " + id + " not found"));
+        vehicle.setAvailability(false);
+        return vehicleRepository.save(vehicle);
     }
 
     @Autowired

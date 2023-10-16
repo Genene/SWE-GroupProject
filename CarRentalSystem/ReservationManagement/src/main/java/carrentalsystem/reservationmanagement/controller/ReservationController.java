@@ -1,6 +1,8 @@
 package carrentalsystem.reservationmanagement.controller;
 
 
+import carrentalsystem.reservationmanagement.dto.ReservationRequestDTO;
+import carrentalsystem.reservationmanagement.dto.ReservationResponseDTO;
 import carrentalsystem.reservationmanagement.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,15 +13,16 @@ import carrentalsystem.reservationmanagement.model.Reservation;
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
     private final ReservationService reservationService;
+
     @Autowired
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService){
         this.reservationService = reservationService;
     }
     @PostMapping
-    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
+    public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDTO reservationRequestDTO) {
         try{
-            Reservation createdReservation = reservationService.createReservation(reservation);
-            return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);
+            ReservationResponseDTO createdReservationRequestDTO = reservationService.createReservation(reservationRequestDTO);
+            return new ResponseEntity<>(createdReservationRequestDTO, HttpStatus.CREATED);
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Failed to create reservation");
         }
@@ -28,18 +31,18 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getReservationById(@PathVariable Long id) {
         try{
-            Reservation reservation = reservationService.getReservationById(id);
-            return new ResponseEntity<>(reservation, HttpStatus.OK);
+            ReservationResponseDTO reservationRequestDTO = reservationService.getReservationById(id);
+            return new ResponseEntity<>(reservationRequestDTO, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Failed to get reservation");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateReservation(@RequestBody Reservation reservation, @PathVariable Long id) {
+    public ResponseEntity<?> updateReservation(@RequestBody ReservationRequestDTO reservationRequestDTO, @PathVariable Long id) {
         try{
-            Reservation updatedReservation = reservationService.updateReservation(reservation, id);
-            return new ResponseEntity<>(updatedReservation, HttpStatus.OK);
+            ReservationResponseDTO updatedReservationResponseDTO = reservationService.updateReservation(reservationRequestDTO, id);
+            return new ResponseEntity<>(updatedReservationResponseDTO, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Failed to update reservation");
         }
@@ -58,7 +61,7 @@ public class ReservationController {
     @GetMapping
     public ResponseEntity<?> getAllReservations() {
         try{
-            Iterable<Reservation> reservations = reservationService.getAllReservations();
+            Iterable<ReservationResponseDTO> reservations = reservationService.getAllReservations();
             return new ResponseEntity<>(reservations, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Failed to get reservations");
@@ -68,7 +71,7 @@ public class ReservationController {
     @GetMapping("/search")
     public ResponseEntity<?> searchReservations(@RequestParam String query) {
         try{
-            Iterable<Reservation> reservations = reservationService.searchReservations(query);
+            Iterable<ReservationResponseDTO> reservations = reservationService.searchReservations(query);
             return new ResponseEntity<>(reservations, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Failed to search reservations");
@@ -78,7 +81,7 @@ public class ReservationController {
     @GetMapping("/search/advanced")
     public ResponseEntity<?> advancedSearchReservations(@RequestParam String query, @RequestParam String sort) {
         try{
-            Iterable<Reservation> reservations = reservationService.advancedSearchReservations(query, sort);
+            Iterable<ReservationResponseDTO> reservations = reservationService.advancedSearchReservations(query, sort);
             return new ResponseEntity<>(reservations, HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Failed to advanced search reservations");

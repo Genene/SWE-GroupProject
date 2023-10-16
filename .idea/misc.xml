@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/CarRentalSystem/RentalManagement/pom.xml" />
         <option value="$PROJECT_DIR$/CarRentalSystem/ReservationManagement/pom.xml" />
         <option value="$PROJECT_DIR$/CarRentalSystem/ServiceDiscovery/pom.xml" />
+        <option value="$PROJECT_DIR$/CarRentalSystem/APIGateway/pom.xml" />
       </list>
     </option>
   </component>
