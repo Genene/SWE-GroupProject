@@ -1,5 +1,6 @@
 package carrentalsystem.vehiclemanagement.model;
 
+import carrentalsystem.vehiclemanagement.model.enums.VehicleStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class Vehicle {
     @NotNull(message = "This field is required")
     private String plateNumber;     // License plate number (e.g., "ABC123")
     @NotNull(message = "This field is required")
-    private boolean availability;   // Availability status (true or false)localhost:9091/api/v1/vehicles/2
+    private VehicleStatus availability;   // Availability status of the vehicle (e.g., "Rented")
     @NotNull(message = "This field is required")
     private String type;            // Type of vehicle (e.g., "Sedan")
     @NotNull(message = "This field is required")

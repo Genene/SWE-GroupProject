@@ -2,6 +2,7 @@ package carrentalsystem.vehiclemanagement.controller;
 
 
 
+import carrentalsystem.vehiclemanagement.exceptions.VehicleException;
 import carrentalsystem.vehiclemanagement.model.Vehicle;
 import carrentalsystem.vehiclemanagement.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,23 @@ public class VehicleController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Vehicle> getVehicleById(@PathVariable Long id) {
-        return vehicleService.getVehicleById(id);
+    public ResponseEntity<?> getVehicleById(@PathVariable Long id) {
+        try{
+            Vehicle vehicle = vehicleService.getVehicleById(id);
+            return new ResponseEntity<>(vehicle.getId(), HttpStatus.OK);
+        } catch (VehicleException e)
+        {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<?> getAvailableVehicles() {
+        List<Vehicle> vehicles = vehicleService.getAvailableVehicles();
+        if (vehicles.isEmpty())
+            return new ResponseEntity<String>("No Vehicles found", HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
     }
 
     @PostMapping
@@ -58,6 +74,19 @@ public class VehicleController {
 
     }
 
+    @PutMapping("/{id}/reserved")
+    public ResponseEntity<?> setVehicleBooked(@PathVariable Long id) {
+        try {
+            Vehicle updated = vehicleService.setVehicleBooked(id);
+            return new ResponseEntity<>("Vehicle is booked", HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVehicle(@PathVariable Long id) {
 
@@ -70,6 +99,7 @@ public class VehicleController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
 
     @Autowired
     public void setVehicleService(VehicleService vehicleService) {

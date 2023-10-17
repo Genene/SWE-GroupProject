@@ -1,7 +1,9 @@
 package carrentalsystem.vehiclemanagement.service.impl;
 
 
+import carrentalsystem.vehiclemanagement.exceptions.VehicleException;
 import carrentalsystem.vehiclemanagement.model.Vehicle;
+import carrentalsystem.vehiclemanagement.model.enums.VehicleStatus;
 import carrentalsystem.vehiclemanagement.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Optional<Vehicle> getVehicleById(Long id) {
-        return vehicleRepository.findById(id);
+    public Vehicle getVehicleById(Long id) {
+        return vehicleRepository.findById(id).orElseThrow(() -> new VehicleException("Vehicle with id: " + id + " not found"));
     }
 
     @Override
@@ -44,7 +46,7 @@ public class VehicleServiceImpl implements VehicleService {
         existingVehicle.setVin(vehicle.getVin());
         existingVehicle.setColor(vehicle.getColor());
         existingVehicle.setPlateNumber(vehicle.getPlateNumber());
-        existingVehicle.setAvailability(vehicle.isAvailability());
+        existingVehicle.setAvailability(vehicle.getAvailability());
         existingVehicle.setType(vehicle.getType());
         existingVehicle.setLocation(vehicle.getLocation());
         existingVehicle.setRentalRate(vehicle.getRentalRate());
@@ -57,6 +59,18 @@ public class VehicleServiceImpl implements VehicleService {
     public void deleteVehicle(Long id) {
         vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle with id: " + id + " not found"));
         vehicleRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Vehicle> getAvailableVehicles() {
+        return vehicleRepository.findByAvailability(VehicleStatus.AVAILABLE);
+    }
+
+    @Override
+    public Vehicle setVehicleBooked(Long id) {
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle with id: " + id + " not found"));
+        vehicle.setAvailability(VehicleStatus.BOOKED);
+        return vehicleRepository.save(vehicle);
     }
 
     @Autowired

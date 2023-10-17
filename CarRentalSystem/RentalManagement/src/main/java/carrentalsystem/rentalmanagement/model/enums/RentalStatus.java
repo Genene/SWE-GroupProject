@@ -1,7 +1,7 @@
 package carrentalsystem.rentalmanagement.model.enums;
 
 public enum RentalStatus {
-    BOOKED,
+    RENTED,
     EXTENDED,
     PAID,
     REFUNDED,

@@ -22,18 +22,13 @@ public class Payment {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int paymentId;
-        private int bookingId;
-        private String paymentMethod;
+
+        private long bookingId;
         private PaymentStatus paymentStatus;
         private double amount;
         private LocalDate paymentDate;
-        private LocalDateTime paymentTime;
         private PaymentType paymentType;
         private String paymentDescription;
         private String paymentCurrency;
         private String paymentReference;
-        private String paymentMode;
-        private String paymentChannel;
-        private String paymentChannelProvider;
-        private String paymentChannelProviderCountry;
 }

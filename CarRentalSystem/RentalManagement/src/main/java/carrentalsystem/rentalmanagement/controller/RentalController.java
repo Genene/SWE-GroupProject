@@ -3,26 +3,58 @@ package carrentalsystem.rentalmanagement.controller;
 
 
 
+import carrentalsystem.rentalmanagement.dto.RentalRequestDTO;
+import carrentalsystem.rentalmanagement.dto.RentalResponseDTO;
+import carrentalsystem.rentalmanagement.exceptions.RentalException;
+import carrentalsystem.rentalmanagement.service.RentalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import carrentalsystem.rentalmanagement.model.Rental;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rentals")
 public class RentalController {
 
+    private final RentalService rentalService;
+
+    @Autowired
+    public RentalController(RentalService rentalService) {
+        this.rentalService = rentalService;
+    }
+
     @GetMapping
-    public String getAllRentals() {
-        return "getAllRentals";
+    public ResponseEntity<?> getAllRentals() {
+        try{
+            List<RentalResponseDTO> rentals = rentalService.getAllRentals();
+            return new ResponseEntity<>(rentals, HttpStatus.OK);
+        }catch (RentalException e){
+            return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to get rentals");
+        }
     }
 
     @GetMapping("/{id}")
-    public String getRentalById(@PathVariable Long id) {
-        return "getRentalById";
+    public ResponseEntity<?> getRentalById(@PathVariable Long id) {
+        try{
+            RentalResponseDTO rental = rentalService.getRentalById(id);
+            return new ResponseEntity<>(rental, HttpStatus.OK);
+        }catch (RentalException e){
+            return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to get rental");
+        }
     }
 
     @PostMapping
-    public String createRental() {
-        return "createRental";
+    public ResponseEntity<?> createRental(@RequestBody RentalRequestDTO rentalRequestDTO) {
+        try{
+            RentalResponseDTO createdRental = rentalService.createRental(rentalRequestDTO);
+            return new ResponseEntity<>(createdRental, HttpStatus.CREATED);
+        }catch (RentalException e){
+            return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to create rental");
+        }
     }
 
     @PutMapping("/{id}")
@@ -30,29 +62,26 @@ public class RentalController {
         return "updateRental";
     }
 
-    @PostMapping("/{id}/book")
-    public String bookRental(@PathVariable Long id) {
-        return "bookRental";
-    }
-
     @PostMapping("/{id}/extend")
-    public String extendRental(@PathVariable Long id) {
-        return "extendRental";
+    public ResponseEntity<?>  extendRental(@PathVariable Long id,@RequestBody LocalDate newEndDate) {
+        try{
+            String result = rentalService.extendRental(id, newEndDate);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }catch (RentalException e){
+            return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to extend rental");
+        }
     }
 
-    @PostMapping("/{id}/pay")
-    public String payRental(@PathVariable Long id) {
-        return "payRental";
-    }
-    @PostMapping("/{id}/refund")
-    public String refundRental(@PathVariable Long id) {
-        return "refundRental";
-    }
 
 
     @PostMapping("/{id}/cancel")
-    public String cancelRental(@PathVariable Long id) {
-        return "cancelRental";
+    public ResponseEntity<?> cancelRental(@PathVariable Long id) {
+        try{
+            RentalResponseDTO cancelledRental = rentalService.cancelRental(id);
+            return new ResponseEntity<>(cancelledRental, HttpStatus.OK);
+        }catch (RentalException e){
+            return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to cancel rental");
+        }
     }
 
     @PostMapping("/{id}/return")

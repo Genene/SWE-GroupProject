@@ -2,7 +2,7 @@ package carrentalsystem.paymentprocessing.model.enums;
 
 public enum PaymentStatus {
     PENDING,
-    SUCCESS,
+    PAID,
     FAILED,
     CANCELLED,
     REFUNDED
