@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 public class ReservationResponseDTO {
-    private long reservationId;
+    private long id;
     private long vehicleId;
     private long customerId;
     private LocalDate startDate;

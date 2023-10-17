@@ -36,7 +36,7 @@ public class ReservationController {
     public ResponseEntity<?> getReservationById(@PathVariable Long id) {
         try{
             ReservationResponseDTO reservationRequestDTO = reservationService.getReservationById(id);
-            return new ResponseEntity<>(reservationRequestDTO, HttpStatus.OK);
+            return new ResponseEntity<>(reservationRequestDTO.getId(), HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to get reservation");
         }

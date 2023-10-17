@@ -48,7 +48,7 @@ public class RentalController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createRental(RentalRequestDTO rentalRequestDTO) {
+    public ResponseEntity<?> createRental(@RequestBody RentalRequestDTO rentalRequestDTO) {
         try{
             RentalResponseDTO createdRental = rentalService.createRental(rentalRequestDTO);
             return new ResponseEntity<>(createdRental, HttpStatus.CREATED);
@@ -60,11 +60,6 @@ public class RentalController {
     @PutMapping("/{id}")
     public String updateRental(@PathVariable Long id) {
         return "updateRental";
-    }
-
-    @PostMapping("/{id}/book")
-    public String bookRental(@PathVariable Long id) {
-        return "bookRental";
     }
 
     @PostMapping("/{id}/extend")

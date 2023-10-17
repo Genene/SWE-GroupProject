@@ -60,7 +60,7 @@ public class RentalServiceImpl implements RentalService {
     public RentalResponseDTO getRentalById(Long id) {
         Optional<Rental> rentalOptional = rentalRepository.findById(id);
         if (rentalOptional.isEmpty())
-            throw new RuntimeException("Rental not found");
+            throw new RentalException("Rental not found");
         return modelMapper.map(rentalOptional.get(), RentalResponseDTO.class);
     }
 
@@ -137,23 +137,15 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public PaymentStatus payRental(RentalRequestDTO rental, double amount) {
-        String paymentUri = apiGatewayUri + "/payments/process";
+        String paymentUri = apiGatewayUri + "/payments/"+rental.getReservation_id()+"/"+amount+"/"+rental.getPaymentType()+"/"+rental.getPaymentDescription()+"/"+rental.getPaymentCurrency();
         ResponseEntity<?> response;
         try{
-            response = restTemplate.postForEntity(paymentUri,null,String.class,rental.getReservation_id()
+            response = restTemplate.postForEntity(paymentUri,null,PaymentStatus.class,rental.getReservation_id()
                     ,amount,rental.getPaymentType(),rental.getPaymentDescription(),rental.getPaymentCurrency());
             return (PaymentStatus) response.getBody();
         }catch (PaymentException e){
             throw new RuntimeException("Payment failed");
         }
-
-        // we can only pay a rental if it is not cancelled or returned
-        // we can only pay a rental if the payment status is not paid
-        // we can only pay a rental if the payment status is not refunded
-        // we can only pay a rental if the payment status is not cancelled
-        // we can only pay a rental if the payment status is not returned
-        // we need to send a rest call to payment service to pay the rental
-        // we need to send a rest call to reservation service to update the reservation status i.e. CONFIRMED or PAID
     }
 
     @Override

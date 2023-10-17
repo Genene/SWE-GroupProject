@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reservationId;
+    private long id;
     @NotNull(message = "Vehicle is required")
     private long vehicleId;
     @NotNull(message = "Customer is required")
@@ -33,5 +33,6 @@ public class Reservation {
     private LocalDate endDate;
     private double totalPrice;//
     private ReservationStatus status;//
+
 
 }

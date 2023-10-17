@@ -16,9 +16,7 @@ public class ReservationRequestDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private String paymentMethod;
-    private PaymentStatus paymentStatus;
     private PaymentType paymentType;
     private String paymentDescription;
     private String paymentCurrency;
-    private String paymentReference;
 }

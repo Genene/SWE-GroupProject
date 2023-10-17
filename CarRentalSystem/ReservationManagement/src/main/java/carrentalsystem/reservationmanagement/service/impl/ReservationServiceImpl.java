@@ -195,7 +195,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationOptional.setEndDate(newEndDate);
         int dateDifference = newEndDate.getDayOfMonth() - reservationOptional.getStartDate().getDayOfMonth();
         reservationOptional.setTotalPrice(dateDifference * reservationDailyRate);
-        String paymentUrl = gatewayUrl + "payments/" + reservationOptional.getReservationId()+ "/update/price/" + reservationOptional.getTotalPrice();
+        String paymentUrl = gatewayUrl + "payments/" + reservationOptional.getId()+ "/update/price/" + reservationOptional.getTotalPrice();
         return modelMapper.map(reservationOptional, ReservationResponseDTO.class);
     }
 
