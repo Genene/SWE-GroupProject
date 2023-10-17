@@ -18,11 +18,4 @@ public class ReservationResponseDTO {
     private LocalDate endDate;
     private double totalPrice;
     private ReservationStatus status;
-    private String paymentMethod;
-    private PaymentStatus paymentStatus;
-    private LocalDate paymentDate;
-    private PaymentType paymentType;
-    private String paymentDescription;
-    private String paymentCurrency;
-    private String paymentReference;
 }

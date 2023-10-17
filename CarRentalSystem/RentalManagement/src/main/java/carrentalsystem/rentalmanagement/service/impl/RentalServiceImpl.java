@@ -158,11 +158,11 @@ public class RentalServiceImpl implements RentalService {
         if (rental.getPaymentStatus() != PaymentStatus.PAID)
             throw new RuntimeException("Rental is not paid");
         // we can only refund a rental if the payment status is not refunded
-        if (rental.getPaymentStatus() == PaymentStatus.REFUNDED)
-            throw new RuntimeException("Rental is refunded");
+        if (rental.getStatus() == RentalStatus.REFUNDED)
+            throw new RuntimeException("Rental already refunded");
         // we can only refund a rental if the payment status is not cancelled
 
-        restTemplate.postForEntity(apiGatewayUri+"/payments"+rental.getReservation_id()+"/cancel",null,String.class,rental.getReservation_id());
+        restTemplate.postForEntity(apiGatewayUri+"/payments/"+rental.getReservation_id()+"/cancel",null,String.class,rental.getReservation_id());
         rental.setStatus(RentalStatus.REFUNDED);
         return modelMapper.map(rentalRepository.save(rental), RentalResponseDTO.class);
     }
