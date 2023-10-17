@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,19 +23,15 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reservationId;
-
+    @NotNull(message = "Vehicle is required")
     private long vehicleId;
+    @NotNull(message = "Customer is required")
     private long customerId;
+    @NotNull(message = "Start date is required")
     private LocalDate startDate;
+    @NotNull(message = "End date is required")
     private LocalDate endDate;
     private double totalPrice;//
     private ReservationStatus status;//
-    private String paymentMethod;
-    private PaymentStatus paymentStatus;
-    private LocalDate paymentDate;//
-    private PaymentType paymentType;
-    private String paymentDescription;
-    private String paymentCurrency;
-    private String paymentReference;
 
 }

@@ -30,6 +30,11 @@ public class Customer {
     @NotNull
     @Embedded
     private Address address;
+    @NotNull
+    private String drivingLicenseNumber;
+    @NotNull
+    private String drivingLicenseCountry;
+
 
 
 }

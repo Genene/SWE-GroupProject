@@ -23,8 +23,7 @@ public class Payment {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int paymentId;
 
-        private int bookingId;
-        private String paymentMethod;
+        private long bookingId;
         private PaymentStatus paymentStatus;
         private double amount;
         private LocalDate paymentDate;

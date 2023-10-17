@@ -2,6 +2,7 @@ package carrentalsystem.vehiclemanagement.controller;
 
 
 
+import carrentalsystem.vehiclemanagement.exceptions.VehicleException;
 import carrentalsystem.vehiclemanagement.model.Vehicle;
 import carrentalsystem.vehiclemanagement.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class VehicleController {
         try{
             Vehicle vehicle = vehicleService.getVehicleById(id);
             return new ResponseEntity<>(vehicle.getId(), HttpStatus.OK);
-        } catch (Exception e)
+        } catch (VehicleException e)
         {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

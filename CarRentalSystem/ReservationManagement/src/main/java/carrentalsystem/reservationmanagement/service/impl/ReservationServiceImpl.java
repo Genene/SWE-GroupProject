@@ -3,6 +3,7 @@ package carrentalsystem.reservationmanagement.service.impl;
 
 import carrentalsystem.reservationmanagement.dto.ReservationRequestDTO;
 import carrentalsystem.reservationmanagement.dto.ReservationResponseDTO;
+import carrentalsystem.reservationmanagement.exceptions.VehicleException;
 import carrentalsystem.reservationmanagement.model.Reservation;
 import carrentalsystem.reservationmanagement.model.enums.ReservationStatus;
 import carrentalsystem.reservationmanagement.repository.ReservationRepository;
@@ -40,97 +41,92 @@ public class ReservationServiceImpl implements ReservationService {
     RestTemplate restTemplate;
     @Override
     public ReservationResponseDTO createReservation(ReservationRequestDTO reservation) {
-
-        try {
-            String vehicleUrl = gatewayUrl + "vehicles/" + reservation.getVehicleId();
-            ResponseEntity<?> responseFromVehicleService =  restTemplate.getForEntity(vehicleUrl, Long.class);
+        if(reservation.getStartDate().isAfter(reservation.getEndDate()))
+            throw new RuntimeException("Start date cannot be after end date");
+        if(reservation.getStartDate().isBefore(LocalDate.now()))
+            throw new RuntimeException("Start date cannot be before today");
+        String vehicleUrl = gatewayUrl + "vehicles/" + reservation.getVehicleId();
+        ResponseEntity<?> responseFromVehicleService;
+            try{
+                responseFromVehicleService =  restTemplate.getForEntity(vehicleUrl, Long.class);
+            } catch (VehicleException e) {
+              throw new VehicleException(e.getMessage());
+            } catch (Exception e) {
+                throw new RuntimeException("Vehicle Service is down or not responding, please try again later"); //finish this when vehicle service is up and running or down
+                //throw new VehicleException(e.getMessage());
+            }
             if (responseFromVehicleService.getStatusCode().isError())
                 throw new RuntimeException("Vehicle with id: " + reservation.getVehicleId() + " not found");
             else {
+
                 String customerUrl = gatewayUrl + "customers/" + reservation.getCustomerId();
-                try{
-                    ResponseEntity<?> responseFromCustomerService =  restTemplate.getForEntity(customerUrl, Long.class);
+                ResponseEntity<?> responseFromCustomerService;
+                    try{
+                        responseFromCustomerService =  restTemplate.getForEntity(customerUrl, Long.class);
+                    }catch (Exception e) {
+                        throw new RuntimeException("Customer Service is down or not responding, please try again later");
+                    }
                     if (responseFromCustomerService.getStatusCode().isError())
                         throw new RuntimeException("Customer with id: " + reservation.getCustomerId() + " not found");
                     else{
                         Reservation reservationEntity = new Reservation();
-                        reservationEntity.setVehicleId(reservation.getVehicleId());
-                        reservationEntity.setCustomerId(reservation.getCustomerId());
-                        reservationEntity.setStartDate(reservation.getStartDate());
-                        reservationEntity.setEndDate(reservation.getEndDate());
-                        reservationEntity.setPaymentMethod(reservation.getPaymentMethod());
-                        reservationEntity.setPaymentStatus(reservation.getPaymentStatus());
-                        reservationEntity.setPaymentType(reservation.getPaymentType());
-                        reservationEntity.setPaymentDescription(reservation.getPaymentDescription());
-                        reservationEntity.setPaymentDescription(reservation.getPaymentDescription());
-                        reservationEntity.setPaymentCurrency(reservation.getPaymentCurrency());
-                        reservationEntity.setPaymentReference(reservation.getPaymentReference());
-                        int dateDifference = reservation.getEndDate().getDayOfMonth() - reservation.getStartDate().getDayOfMonth();
-                        reservationEntity.setTotalPrice(dateDifference * reservationDailyRate);
-                        reservationEntity.setStatus(ReservationStatus.BOOKED);
-                        reservationEntity.setPaymentDate(LocalDate.now());
-                        Reservation savedReservation = reservationRepository.save(reservationEntity);
+                        Reservation savedReservation = setValuesFromDTO(reservation, reservationEntity);
                         restTemplate.put(gatewayUrl + "vehicles/" + reservation.getVehicleId() + "/reserved", String.class);
                         return modelMapper.map(savedReservation, ReservationResponseDTO.class);
                     }
-                } catch (Exception e) {
-                    throw new RuntimeException("Customer with id: " + reservation.getCustomerId() + " not found");
-                }
+
             }
 
-        } catch (Exception e) {
-            throw new RuntimeException("Vehicle with id: " + reservation.getVehicleId() + " not found");
-        }
+
+    }
+
+    private Reservation setValuesFromDTO(ReservationRequestDTO reservation, Reservation reservationEntity) {
+        reservationEntity.setVehicleId(reservation.getVehicleId());
+        reservationEntity.setCustomerId(reservation.getCustomerId());
+        reservationEntity.setStartDate(reservation.getStartDate());
+        reservationEntity.setEndDate(reservation.getEndDate());
+        int dateDifference = reservation.getEndDate().getDayOfMonth() - reservation.getStartDate().getDayOfMonth();
+        reservationEntity.setTotalPrice(dateDifference * reservationDailyRate);
+        reservationEntity.setStatus(ReservationStatus.BOOKED);
+        return reservationRepository.save(reservationEntity);
     }
 
     @Override
     public ReservationResponseDTO getReservationById(Long id) {
-        Optional<Reservation> reservation = reservationRepository.findById(id);
-        return null;
+        return reservationRepository.findById(id).map(reservation ->
+                modelMapper.map(reservation, ReservationResponseDTO.class))
+                .orElseThrow(() -> new RuntimeException("Reservation with id: " + id + " not found"));
     }
 
     @Override
     public ReservationResponseDTO updateReservation(ReservationRequestDTO reservationRequestDTO, Long id) {
-        Reservation reservationOptional = reservationRepository.findById(id).orElseThrow(() -> new RuntimeException("Reservation with id: " + id + " not found"));
-        reservationOptional.setVehicleId(reservationRequestDTO.getVehicleId());
-        reservationOptional.setCustomerId(reservationRequestDTO.getCustomerId());
-        reservationOptional.setStartDate(reservationRequestDTO.getStartDate());
-        reservationOptional.setEndDate(reservationRequestDTO.getEndDate());
-        reservationOptional.setPaymentMethod(reservationRequestDTO.getPaymentMethod());
-        reservationOptional.setPaymentStatus(reservationRequestDTO.getPaymentStatus());
-        reservationOptional.setPaymentType(reservationRequestDTO.getPaymentType());
-        reservationOptional.setPaymentDescription(reservationRequestDTO.getPaymentDescription());
-        reservationOptional.setPaymentDescription(reservationRequestDTO.getPaymentDescription());
-        reservationOptional.setPaymentCurrency(reservationRequestDTO.getPaymentCurrency());
-        reservationOptional.setPaymentReference(reservationRequestDTO.getPaymentReference());
-        int dateDifference = reservationRequestDTO.getEndDate().getDayOfMonth() - reservationRequestDTO.getStartDate().getDayOfMonth();
-        reservationOptional.setTotalPrice(dateDifference * reservationDailyRate);
-        reservationOptional.setStatus(ReservationStatus.BOOKED);
-        reservationOptional.setPaymentDate(LocalDate.now());
-        Reservation savedReservation = reservationRepository.save(reservationOptional);
-        return modelMapper.map(savedReservation, ReservationResponseDTO.class);
+        Reservation reservationOptional = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reservation with id: " + id + " not found"));
+        Reservation updatedReservation = setValuesFromDTO(reservationRequestDTO, reservationOptional);
+        return modelMapper.map(updatedReservation, ReservationResponseDTO.class);
 
     }
 
     @Override
     public void deleteReservation(Long id) {
-        reservationRepository.deleteById(id);
+        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+        if (reservationOptional.isPresent()) {
+            reservationRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Reservation with id: " + id + " not found");
+        }
     }
 
     @Override
     public List<ReservationResponseDTO> getAllReservations() {
-        return null;
+        List<ReservationResponseDTO> reservationResponseDTOList = new ArrayList<>();
+        List<Reservation> reservationList = reservationRepository.findAll();
+        for (Reservation reservation : reservationList) {
+            reservationResponseDTOList.add(modelMapper.map(reservation, ReservationResponseDTO.class));
+        }
+        return reservationResponseDTOList;
     }
 
-    @Override
-    public List<ReservationResponseDTO> searchReservations(String query) {
-        return null;
-    }
-
-    @Override
-    public List<ReservationResponseDTO> advancedSearchReservations(String query, String sort) {
-        return null;
-    }
 
     @Override
     public List<ReservationResponseDTO> getReservationByVehicleId(long vehicleId) {
@@ -190,6 +186,17 @@ public class ReservationServiceImpl implements ReservationService {
             reservationResponseDTOList.add(modelMapper.map(reservation, ReservationResponseDTO.class));
         }
         return reservationResponseDTOList;
+    }
+
+    @Override
+    public ReservationResponseDTO extendReservation(Long id, LocalDate newEndDate) {
+        Reservation reservationOptional = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reservation with id: " + id + " not found"));
+        reservationOptional.setEndDate(newEndDate);
+        int dateDifference = newEndDate.getDayOfMonth() - reservationOptional.getStartDate().getDayOfMonth();
+        reservationOptional.setTotalPrice(dateDifference * reservationDailyRate);
+        String paymentUrl = gatewayUrl + "payments/" + reservationOptional.getReservationId()+ "/update/price/" + reservationOptional.getTotalPrice();
+        return modelMapper.map(reservationOptional, ReservationResponseDTO.class);
     }
 
 

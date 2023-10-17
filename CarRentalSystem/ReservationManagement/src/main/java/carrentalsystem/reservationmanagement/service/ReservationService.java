@@ -20,9 +20,7 @@ public interface ReservationService {
 
     List<ReservationResponseDTO> getAllReservations();
 
-    List<ReservationResponseDTO> searchReservations(String query);
 
-    List<ReservationResponseDTO> advancedSearchReservations(String query, String sort);
 
     List<ReservationResponseDTO> getReservationByVehicleId(long vehicleId);
 
@@ -35,4 +33,6 @@ public interface ReservationService {
     List<ReservationResponseDTO> getReservationByTotalPrice(double totalPrice);
 
     List<ReservationResponseDTO> getReservationByStatus(ReservationStatus status);
+
+    ReservationResponseDTO extendReservation(Long id, LocalDate newEndDate);
 }
