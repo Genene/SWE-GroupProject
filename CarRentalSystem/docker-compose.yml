@@ -1,0 +1,101 @@
+version: "3"
+services:
+
+  car_rental-db:
+    container_name: car_rental-db
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_PASSWORD=user@1234
+      - MYSQL_DATABASE=car_rental
+    ports:
+      - "3306:3306"
+    volumes:
+      - car_rental-db-data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - car_rental
+
+  # Service Discovery
+  eureka:
+    build: ./ServiceDiscovery
+    ports:
+      - "8761:8761"
+    networks:
+      - car_rental
+  # API Gateway
+  apigateway:
+    build: ./APIGateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+    networks:
+      - car_rental
+
+  # Customer Management
+  customermanagement:
+    build: ./CustomerManagement
+    ports:
+      - "8081:8081"
+    depends_on:
+      - apigateway
+      - eureka
+      - car_rental-db
+    networks:
+      - car_rental
+  # Payment Processing
+  vehiclemanagement:
+    build: ./VehicleManagement
+    ports:
+      - "8082:8082"
+    depends_on:
+      - apigateway
+      - eureka
+      - car_rental-db
+    networks:
+      - car_rental
+  paymentprocessing:
+    build: ./PaymentProcessing
+    ports:
+      - "8083:8083"
+    depends_on:
+      - apigateway
+      - eureka
+      - car_rental-db
+
+    networks:
+      - car_rental
+  # Rental Management
+  rentalmanagement:
+    build: ./RentalManagement
+    ports:
+      - "8084:8084"
+    depends_on:
+      - apigateway
+      - eureka
+      - car_rental-db
+
+    networks:
+      - car_rental
+  # Reservation Management
+  reservationmanagement:
+    build: ./ReservationManagement
+    ports:
+      - "8085:8085"
+    depends_on:
+      - apigateway
+      - eureka
+      - car_rental-db
+
+    networks:
+      - car_rental
+  # Vehicle Management
+
+volumes:
+  car_rental-db-data:
+
+networks:
+  car_rental:
+    driver: bridge

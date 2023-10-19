@@ -80,7 +80,7 @@ public class RentalController {
             RentalResponseDTO cancelledRental = rentalService.cancelRental(id);
             return new ResponseEntity<>(cancelledRental, HttpStatus.OK);
         }catch (RentalException e){
-            return ResponseEntity.badRequest().body(e.getMessage()+" : Failed to cancel rental");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
